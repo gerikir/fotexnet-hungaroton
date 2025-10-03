@@ -1,20 +1,9 @@
 import { TArtist } from "../ArtistListScreen/ArtistListScreenContainer";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
 const ArtistCardComponent = ({ artist }: { artist: TArtist }) => (
-    <Card
-        key={artist.id}
-        sx={{
-            display: "flex",
-            height: "380px",
-            flexDirection: "column",
-            overflow: "hidden",
-            borderRadius: "24px",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)",
-        }}
-    >
-        {/* Album cover image - takes most of the card height */}
+    <Card key={artist.id} className="shadow-[0_6px_12px_rgba(0,0,0,0.35),0_3px_6px_rgba(0,0,0,0.25),0_1px_2px_rgba(0,0,0,0.15)] flex h-96 flex-col overflow-hidden rounded-3xl">
         <div className="relative w-full flex-1">
             <Image
                 src={artist.portrait || "/album-placeholder.png"}
@@ -26,22 +15,14 @@ const ArtistCardComponent = ({ artist }: { artist: TArtist }) => (
             />
         </div>
 
-        {/* Dark gray background text area at the bottom with gradient at top */}
-        <div className="relative flex min-h-[108px] flex-col justify-between bg-gray-800 px-4 pb-4 pt-2 text-left">
-            {/* Gradient overlay at the top of text panel */}
+        <div className="relative flex min-h-[108px] flex-col justify-between bg-gray-800 p-4 text-left">
             <div className="absolute inset-x-0 bottom-[100%] h-28 bg-gradient-to-b from-transparent to-gray-800" />
-            <Typography
-                variant="h6"
-                component="h3"
-                className="!m-0 mb-1 !text-lg !font-bold !leading-tight !text-white"
-                title={artist.name}
-            >
+            <h3 className="m-0 pr-12 text-lg font-bold leading-tight text-white" title={artist.name}>
                 {artist.name}
-            </Typography>
-            <div className="flex items-center gap-2">
-                <Typography variant="body2" className="!text-sm !text-gray-300">
-                    {artist.albumCount} album{artist.albumCount !== 1 ? "s" : ""}
-                </Typography>
+            </h3>
+            <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                <span className="text-sm text-gray-300">{artist.albumCount}</span>
+                <Image src="/album.svg" alt="Album" width={16} height={16} className="opacity-70" />
             </div>
         </div>
     </Card>

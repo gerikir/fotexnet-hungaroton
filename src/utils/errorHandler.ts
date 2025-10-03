@@ -24,7 +24,7 @@ export class ErrorHandler {
 
         // Response errors
         if (typeof error === "object" && error !== null && "status" in error) {
-            const status = (error as any).status;
+            const status = (error as { status: number }).status;
 
             if (status >= 500) {
                 return {

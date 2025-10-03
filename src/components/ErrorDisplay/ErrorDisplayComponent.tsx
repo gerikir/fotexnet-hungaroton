@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert, AlertTitle, Button, Box } from "@mui/material";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { AppError } from "../../types/error";
 import Image from "next/image";
 
@@ -18,16 +19,16 @@ const ErrorDisplayComponent: React.FC<ErrorDisplayProps> = ({
     onClose,
     showRetryButton = true,
 }) => {
-    const getSeverity = (error: AppError): "error" | "warning" | "info" => {
+    const getVariant = (error: AppError): "default" | "destructive" => {
         switch (error.type) {
             case "NETWORK":
-                return "warning";
+                return "default";
             case "SERVER":
-                return "error";
+                return "destructive";
             case "VALIDATION":
-                return "info";
+                return "default";
             default:
-                return "error";
+                return "destructive";
         }
     };
 
@@ -45,19 +46,22 @@ const ErrorDisplayComponent: React.FC<ErrorDisplayProps> = ({
     };
 
     return (
-        <Box className="my-8 flex justify-center">
-            <Alert
-                severity={getSeverity(error)}
-                className="w-auto max-w-md"
-                action={
-                    <Box className="flex gap-2">
+        <div className="my-8 flex justify-center">
+            <Alert variant={getVariant(error)} className="w-auto max-w-md">
+                <AlertTitle>{getTitle(error)}</AlertTitle>
+                <AlertDescription className="flex items-center justify-between">
+                    <div>
+                        {error.message}
+                        {error.statusCode && <span className="ml-2 text-sm opacity-75">(HTTP {error.statusCode})</span>}
+                    </div>
+                    <div className="flex gap-2">
                         {showRetryButton && onRetry && error.retryable && (
                             <Button
-                                size="small"
+                                size="sm"
                                 onClick={onRetry}
                                 disabled={isRetrying}
-                                variant="text"
-                                className="flex w-20 items-center gap-1 !text-gray-500"
+                                variant="outline"
+                                className="flex w-20 items-center gap-1 text-gray-500"
                             >
                                 <Image src="/refresh.svg" alt="Refresh" width={16} height={16} />
                                 {isRetrying ? "Retrying..." : "Retry"}
@@ -65,27 +69,19 @@ const ErrorDisplayComponent: React.FC<ErrorDisplayProps> = ({
                         )}
                         {onClose && (
                             <Button
-                                size="small"
+                                size="sm"
                                 onClick={onClose}
-                                variant="text"
-                                className="flex w-20 items-center gap-1 !text-gray-500"
+                                variant="outline"
+                                className="flex w-20 items-center gap-1 text-gray-500"
                             >
                                 <Image src="/close.svg" alt="Close" width={16} height={16} />
                                 Close
                             </Button>
                         )}
-                    </Box>
-                }
-            >
-                <AlertTitle>{getTitle(error)}</AlertTitle>
-                {error.message}
-                {error.statusCode && (
-                    <Box component="span" className="ml-2 text-sm opacity-75">
-                        (HTTP {error.statusCode})
-                    </Box>
-                )}
+                    </div>
+                </AlertDescription>
             </Alert>
-        </Box>
+        </div>
     );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent, useTransition } from "react";
+import React, { useState, useEffect, FormEvent, useCallback } from "react";
 import { useRouter } from "next/router";
 import ArtistListScreenComponent from "./ArtistListScreenComponent";
 import { useErrorHandler } from "../../hooks/useErrorHandler";
@@ -75,7 +75,7 @@ interface SearchParams {
 const ArtistListScreenContainer = () => {
     const router = useRouter();
     const perPage = 50;
-    const { errorState, handleError, clearError, retry, getErrorMessage } = useErrorHandler();
+    const { errorState, handleError, clearError, retry } = useErrorHandler();
 
     const [artists, setArtists] = useState<TArtist[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -91,30 +91,7 @@ const ArtistListScreenContainer = () => {
 
     const [tempSearchTerm, setTempSearchTerm] = useState<string>("");
 
-    const [isPending, startTransition] = useTransition();
-
-    useEffect(() => {
-        if (!router.isReady) return;
-
-        const { page, search, type, letter, include_image } = router.query;
-
-        const newParams: SearchParams = {
-            page: page && typeof page === "string" ? parseInt(page) : 1,
-            search: search && typeof search === "string" ? search : "",
-            type: type && typeof type === "string" ? type : "",
-            letter: letter && typeof letter === "string" ? letter : "",
-            showAlbumCover: include_image === "true",
-        };
-
-        setSearchParams(newParams);
-        setTempSearchTerm(newParams.search);
-    }, [router.isReady, router.query]);
-
-    useEffect(() => {
-        fetchArtists();
-    }, [searchParams]);
-
-    const fetchArtists = async () => {
+    const fetchArtists = useCallback(async () => {
         setLoading(true);
         clearError();
 
@@ -147,20 +124,41 @@ const ArtistListScreenContainer = () => {
             }
 
             const data: ArtistResponse = await response.json();
-            startTransition(() => {
-                setArtists(data.data);
-                setTotalPages(data.pagination.total_pages);
-            });
+            setArtists(data.data);
+            setTotalPages(data.pagination.total_pages);
         } catch (err) {
             handleError(err, "fetchArtists");
             setArtists([]);
         } finally {
             setLoading(false);
         }
-    };
+    }, [searchParams, clearError, handleError]);
+
+    useEffect(() => {
+        if (!router.isReady) return;
+
+        const { page, search, type, letter, include_image } = router.query;
+
+        const newParams: SearchParams = {
+            page: page && typeof page === "string" ? parseInt(page) : 1,
+            search: search && typeof search === "string" ? search : "",
+            type: type && typeof type === "string" ? type : "",
+            letter: letter && typeof letter === "string" ? letter : "",
+            showAlbumCover: include_image === "true",
+        };
+
+        setSearchParams(newParams);
+        setTempSearchTerm(newParams.search);
+    }, [router.isReady, router.query]);
+
+    useEffect(() => {
+        fetchArtists();
+    }, [searchParams.page, searchParams.search, searchParams.type, searchParams.letter, searchParams.showAlbumCover]);
 
     const updateUrl = (newParams: Partial<SearchParams>) => {
         const updatedParams = { ...searchParams, ...newParams };
+
+        setSearchParams(updatedParams);
 
         const query: Record<string, string> = {};
 
@@ -170,7 +168,6 @@ const ArtistListScreenContainer = () => {
         if (updatedParams.letter) query.letter = updatedParams.letter;
         if (updatedParams.showAlbumCover) query.include_image = "true";
 
-        // Router frissítése
         router.push(
             {
                 pathname: router.pathname,
@@ -232,7 +229,6 @@ const ArtistListScreenContainer = () => {
             ABC={ABC}
             onRetry={handleRetry}
             onCloseError={clearError}
-            getErrorMessage={getErrorMessage}
         />
     );
 };

@@ -1,48 +1,17 @@
-import { Card, CardContent, Skeleton } from "@mui/material";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ArtistCardSkeletonComponent = () => (
-    <Card
-        sx={{
-            display: "flex",
-            height: "384px", // h-96
-            flexDirection: "column",
-            overflow: "hidden",
-            borderRadius: "24px", // rounded-3xl
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)",
-        }}
-    >
-        {/* Album cover skeleton - takes most of the card height */}
+    <Card className="shadow-[0_6px_12px_rgba(0,0,0,0.35),0_3px_6px_rgba(0,0,0,0.25),0_1px_2px_rgba(0,0,0,0.15)] flex h-96 flex-col overflow-hidden rounded-3xl">
         <div className="relative w-full flex-1">
-            <Skeleton variant="rectangular" width="100%" height="100%" className="absolute inset-0" />
+            <Skeleton className="absolute inset-0 h-full w-full" />
         </div>
-
-        {/* Dark gray background text area skeleton */}
         <div className="relative flex min-h-[108px] flex-col justify-between bg-gray-800 px-4 pb-4 pt-2 text-left">
-            {/* Gradient overlay at the top of text panel */}
             <div className="absolute inset-x-0 bottom-[100%] h-28 bg-gradient-to-b from-transparent to-gray-800" />
-
-            {/* Artist name skeleton */}
-            <Skeleton
-                variant="text"
-                width="80%"
-                height="24px"
-                sx={{
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    borderRadius: "4px",
-                }}
-            />
-
-            {/* Album count skeleton */}
-            <div className="flex items-center gap-2">
-                <Skeleton
-                    variant="text"
-                    width="60px"
-                    height="16px"
-                    sx={{
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        borderRadius: "4px",
-                    }}
-                />
+            <Skeleton className="h-6 w-4/5 rounded bg-white/10" />
+            <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                <Skeleton className="h-4 w-8 rounded bg-white/10" />
+                <Skeleton className="h-4 w-4 rounded bg-white/10" />
             </div>
         </div>
     </Card>

@@ -5,10 +5,13 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "**",
+                hostname: process.env.NEXT_PUBLIC_API_BASE_URL?.replace("https://", "") || "localhost",
+            },
+            {
+                protocol: "https",
+                hostname: "picsum.photos",
             },
         ],
-        domains: ["exam.api.fotex.net", "picsum.photos"],
     },
 };
 

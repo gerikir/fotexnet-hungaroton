@@ -50,17 +50,11 @@ export type TArtist = {
 
 interface ArtistResponse {
     data: TArtist[];
-    meta: {
-        current_page: number;
-        from: number;
-        last_page: number;
-        path: string;
-        per_page: number;
-        to: number;
-        total: number;
-    };
     pagination: {
+        current_page: number;
         total_pages: number;
+        per_page: number;
+        total_items: number;
     };
 }
 
@@ -105,7 +99,11 @@ const ArtistListScreenContainer = () => {
             if (searchParams.letter) params.append("letter", searchParams.letter);
             if (searchParams.showAlbumCover) params.append("include_image", "true");
 
-            const url = `https://exam.api.fotex.net/api/artists?${params.toString()}`;
+            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+            if (!baseUrl) {
+                throw new Error("NEXT_PUBLIC_API_BASE_URL environment variable is not set");
+            }
+            const url = `${baseUrl}/api/artists?${params.toString()}`;
 
             const response = await fetch(url, {
                 headers: {
@@ -119,20 +117,35 @@ const ArtistListScreenContainer = () => {
                     status: response.status,
                     message: `HTTP error! Status: ${response.status}`,
                 };
-                handleError(error, "fetchArtists");
+                handleError(error);
                 return;
             }
 
             const data: ArtistResponse = await response.json();
+
+            if (!data || !data.data) {
+                throw new Error("Invalid API response structure");
+            }
+
             setArtists(data.data);
-            setTotalPages(data.pagination.total_pages);
+
+            const totalPages = data.pagination?.total_pages || 1;
+            setTotalPages(totalPages);
         } catch (err) {
-            handleError(err, "fetchArtists");
+            handleError(err);
             setArtists([]);
         } finally {
             setLoading(false);
         }
-    }, [searchParams, clearError, handleError]);
+    }, [
+        searchParams.page,
+        searchParams.search,
+        searchParams.type,
+        searchParams.letter,
+        searchParams.showAlbumCover,
+        clearError,
+        handleError,
+    ]);
 
     useEffect(() => {
         if (!router.isReady) return;
@@ -153,7 +166,7 @@ const ArtistListScreenContainer = () => {
 
     useEffect(() => {
         fetchArtists();
-    }, [searchParams.page, searchParams.search, searchParams.type, searchParams.letter, searchParams.showAlbumCover]);
+    }, [fetchArtists]);
 
     const updateUrl = (newParams: Partial<SearchParams>) => {
         const updatedParams = { ...searchParams, ...newParams };

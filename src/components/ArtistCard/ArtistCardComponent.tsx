@@ -3,7 +3,10 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
 const ArtistCardComponent = ({ artist }: { artist: TArtist }) => (
-    <Card key={artist.id} className="shadow-[0_6px_12px_rgba(0,0,0,0.35),0_3px_6px_rgba(0,0,0,0.25),0_1px_2px_rgba(0,0,0,0.15)] flex h-96 flex-col overflow-hidden rounded-3xl">
+    <Card
+        key={artist.id}
+        className="flex h-96 flex-col overflow-hidden rounded-3xl shadow-[0_6px_12px_rgba(0,0,0,0.35),0_3px_6px_rgba(0,0,0,0.25),0_1px_2px_rgba(0,0,0,0.15)]"
+    >
         <div className="relative w-full flex-1">
             <Image
                 src={artist.portrait || "/album-placeholder.png"}

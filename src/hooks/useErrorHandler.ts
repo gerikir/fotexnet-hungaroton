@@ -9,8 +9,8 @@ export const useErrorHandler = () => {
         retryCount: 0,
     });
 
-    const handleError = useCallback((error: unknown, context?: string) => {
-        const appError = ErrorHandler.createError(error, context);
+    const handleError = useCallback((error: unknown) => {
+        const appError = ErrorHandler.createError(error);
         setErrorState({
             error: appError,
             isRetrying: false,
@@ -42,7 +42,7 @@ export const useErrorHandler = () => {
                 clearError();
             } catch (error) {
                 setErrorState((prev) => ({
-                    error: ErrorHandler.createError(error, "retry"),
+                    error: ErrorHandler.createError(error),
                     isRetrying: false,
                     retryCount: prev.retryCount + 1,
                 }));

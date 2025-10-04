@@ -4,6 +4,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+1. Copy the environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Update the API base URL in `.env.local` if needed:
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=https://exam.api.fotex.net
+```
+
+### Development
+
 First, run the development server:
 
 ```bash

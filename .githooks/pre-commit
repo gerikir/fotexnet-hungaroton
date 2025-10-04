@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo "🔍 Running pre-commit checks..."
+
+# Run ESLint
+echo "📝 Running ESLint..."
+npm run lint
+if [ $? -ne 0 ]; then
+    echo "❌ ESLint failed. Please fix the issues before committing."
+    exit 1
+fi
+
+# Run TypeScript check
+echo "🔧 Running TypeScript check..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript check failed. Please fix the issues before committing."
+    exit 1
+fi
+
+echo "✅ All pre-commit checks passed!"

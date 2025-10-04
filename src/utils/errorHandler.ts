@@ -1,8 +1,8 @@
 import { ErrorType, AppError } from "../types/error";
 
 export class ErrorHandler {
-    static createError(error: unknown, context?: string): AppError {
-        console.error(`Error in ${context || "unknown context"}:`, error);
+    static createError(error: unknown): AppError {
+        // console.error(`Error:`, error);
 
         if (error instanceof Error) {
             // Network errors

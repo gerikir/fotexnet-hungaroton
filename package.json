@@ -6,7 +6,11 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "precommit": ".githooks/pre-commit",
+        "prepush": ".githooks/pre-push",
+        "type-check": "tsc --noEmit",
+        "check-all": "npm run lint && npm run type-check && npm run build"
     },
     "dependencies": {
         "@radix-ui/react-label": "^2.1.7",

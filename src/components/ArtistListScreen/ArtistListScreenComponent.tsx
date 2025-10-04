@@ -3,7 +3,7 @@ import Layout from "../Layout";
 import ArtistCard from "../ArtistCard";
 import ArtistCardSkeleton from "../ArtistCard/ArtistCardSkeletonComponent";
 import { ErrorDisplay } from "../ErrorDisplay";
-import { useArtists } from "../../hooks/useArtists";
+import { useArtistsOptimized } from "../../hooks/useArtistsOptimized";
 import { ABC } from "../../constants/abc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,7 +40,7 @@ const ArtistListScreenComponent = () => {
         handleShowAlbumCoverSwitch,
         onRetry,
         onCloseError,
-    } = useArtists();
+    } = useArtistsOptimized();
     return (
         <Layout>
             <div className="py-12">
@@ -128,7 +128,7 @@ const ArtistListScreenComponent = () => {
                     </>
                 )}
 
-                {errorState.error && (
+                {errorState?.error && (
                     <ErrorDisplay
                         error={errorState.error}
                         isRetrying={errorState.isRetrying}
@@ -138,7 +138,7 @@ const ArtistListScreenComponent = () => {
                     />
                 )}
 
-                {!loading && !errorState.error && (
+                {!loading && !errorState?.error && (
                     <>
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
                             {artists.length > 0 ? (

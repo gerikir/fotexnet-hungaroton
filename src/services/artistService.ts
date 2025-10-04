@@ -35,7 +35,9 @@ export class ArtistService {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
             },
+            cache: "default",
         });
 
         if (!response.ok) {

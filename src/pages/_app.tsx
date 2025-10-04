@@ -1,10 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { SWRConfig } from "swr";
+import { swrConfig } from "@/lib/swrConfig";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <>
+        <SWRConfig value={swrConfig}>
             <Head>
                 <link rel="icon" href="/favicon.ico?v=1" />
                 <link rel="shortcut icon" href="/favicon.ico?v=1" />
@@ -13,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <title>Fotexnet Hungaroton</title>
             </Head>
             <Component {...pageProps} />
-        </>
+        </SWRConfig>
     );
 }
 

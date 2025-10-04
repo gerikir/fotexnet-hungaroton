@@ -1,2 +1,1 @@
-import ArtistListScreen from "./ArtistListScreenComponent";
-export default ArtistListScreen;
+export { default as ArtistListScreen } from "./ArtistListScreenComponent";

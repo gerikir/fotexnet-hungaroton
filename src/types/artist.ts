@@ -5,7 +5,7 @@ export interface TArtist {
     portrait?: string;
 }
 
-export interface ArtistResponse {
+export interface TArtistResponse {
     data: TArtist[];
     pagination: {
         current_page: number;
@@ -15,7 +15,7 @@ export interface ArtistResponse {
     };
 }
 
-export interface SearchParams {
+export interface TSearchParams {
     page: number;
     search: string;
     type: string;

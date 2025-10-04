@@ -1,2 +1,1 @@
-import ArtistCard from "./ArtistCardComponent";
-export default ArtistCard;
+export { default as ArtistCard } from "./ArtistCardComponent";

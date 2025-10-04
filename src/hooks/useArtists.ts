@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
-import { ArtistService, ArtistFilters } from "../services/artistService";
-import { TArtist, SearchParams } from "../types/artist";
+import { ArtistService, ArtistFilters } from "@/services/artistService";
+import { TArtist, TSearchParams } from "@/types/artist";
 import { useErrorHandler } from "./useErrorHandler";
 
 export const useArtists = () => {
@@ -13,7 +13,7 @@ export const useArtists = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [totalPages, setTotalPages] = useState<number>(1);
 
-    const [searchParams, setSearchParams] = useState<SearchParams>({
+    const [searchParams, setSearchParams] = useState<TSearchParams>({
         page: 1,
         search: "",
         type: "",
@@ -61,7 +61,7 @@ export const useArtists = () => {
 
         const { page, search, type, letter, include_image } = router.query;
 
-        const newParams: SearchParams = {
+        const newParams: TSearchParams = {
             page: page && typeof page === "string" ? parseInt(page) : 1,
             search: search && typeof search === "string" ? search : "",
             type: type && typeof type === "string" ? type : "",
@@ -77,7 +77,7 @@ export const useArtists = () => {
         fetchArtists();
     }, [fetchArtists]);
 
-    const updateUrl = (newParams: Partial<SearchParams>) => {
+    const updateUrl = (newParams: Partial<TSearchParams>) => {
         const updatedParams = { ...searchParams, ...newParams };
 
         setSearchParams(updatedParams);

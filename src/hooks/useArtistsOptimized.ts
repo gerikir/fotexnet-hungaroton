@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { ArtistService, ArtistFilters } from "../services/artistService";
-import { SearchParams } from "../types/artist";
+import { ArtistService, ArtistFilters } from "@/services/artistService";
+import { TSearchParams } from "@/types/artist";
 import { useErrorHandler } from "./useErrorHandler";
 import { useDebounce } from "./useDebounce";
 
@@ -29,7 +29,7 @@ export const useArtistsOptimized = () => {
     const perPage = 50;
     const { errorState, handleError, clearError } = useErrorHandler();
 
-    const [searchParams, setSearchParams] = useState<SearchParams>({
+    const [searchParams, setSearchParams] = useState<TSearchParams>({
         page: 1,
         search: "",
         type: "",
@@ -73,7 +73,7 @@ export const useArtistsOptimized = () => {
 
         const { page, search, type, letter, include_image } = router.query;
 
-        const newParams: SearchParams = {
+        const newParams: TSearchParams = {
             page: page && typeof page === "string" ? parseInt(page) : 1,
             search: search && typeof search === "string" ? search : "",
             type: type && typeof type === "string" ? type : "",
@@ -92,7 +92,7 @@ export const useArtistsOptimized = () => {
     }, [debouncedSearch, searchParams.search]);
 
     const updateUrl = useCallback(
-        (newParams: Partial<SearchParams>) => {
+        (newParams: Partial<TSearchParams>) => {
             const updatedParams = { ...searchParams, ...newParams };
             setSearchParams(updatedParams);
 

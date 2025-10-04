@@ -1,4 +1,4 @@
-import { ArtistResponse } from "../types/artist";
+import { TArtistResponse } from "../types/artist";
 
 export interface ArtistFilters {
     page: number;
@@ -19,7 +19,7 @@ export class ArtistService {
         }
     }
 
-    static async getArtists(filters: ArtistFilters): Promise<ArtistResponse> {
+    static async getArtists(filters: ArtistFilters): Promise<TArtistResponse> {
         const params = new URLSearchParams();
         params.append("page", filters.page.toString());
         params.append("per_page", filters.per_page.toString());
@@ -44,7 +44,7 @@ export class ArtistService {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data: ArtistResponse = await response.json();
+        const data: TArtistResponse = await response.json();
 
         if (!data || !data.data) {
             throw new Error("Invalid API response structure");

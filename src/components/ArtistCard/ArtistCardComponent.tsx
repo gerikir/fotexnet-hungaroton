@@ -1,4 +1,4 @@
-import { TArtist } from "../ArtistListScreen/ArtistListScreenContainer";
+import { TArtist } from "../../types/artist";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 

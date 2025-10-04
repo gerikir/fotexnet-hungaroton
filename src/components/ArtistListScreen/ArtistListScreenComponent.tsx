@@ -1,10 +1,10 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import Layout from "../Layout";
 import ArtistCard from "../ArtistCard";
 import ArtistCardSkeleton from "../ArtistCard/ArtistCardSkeletonComponent";
 import { ErrorDisplay } from "../ErrorDisplay";
-import { TArtist } from "./ArtistListScreenContainer";
-import { ErrorState } from "../../types/error";
+import { useArtists } from "../../hooks/useArtists";
+import { ABC } from "../../constants/abc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -20,49 +20,27 @@ import {
 } from "@/components/ui/pagination";
 import Image from "next/image";
 
-interface TProps {
-    loading: boolean;
-    errorState: ErrorState;
-    artists: TArtist[];
-    totalPages: number;
-    currentPage: number;
-    searchTerm: string;
-    selectedType: string;
-    selectedLetter: string;
-    ABC: string[];
-    handlePageChange: (page: number) => void;
-    handleSearchSubmit: (e: FormEvent) => void;
-    setTempSearchTerm: (search: string) => void;
-    handleTypeChange: (value: string) => void;
-    handleLetterChange: (value: string) => void;
-    clearSearch: () => void;
-    showAlbumCover: boolean;
-    handleShowAlbumCoverSwitch: (include: boolean) => void;
-    onRetry: () => void;
-    onCloseError: () => void;
-}
-
-const ArtistListScreenComponent = ({
-    loading,
-    errorState,
-    artists,
-    totalPages,
-    currentPage,
-    searchTerm,
-    selectedType,
-    selectedLetter,
-    ABC,
-    handlePageChange,
-    handleSearchSubmit,
-    setTempSearchTerm,
-    handleTypeChange,
-    handleLetterChange,
-    clearSearch,
-    showAlbumCover,
-    handleShowAlbumCoverSwitch,
-    onRetry,
-    onCloseError,
-}: TProps) => {
+const ArtistListScreenComponent = () => {
+    const {
+        artists,
+        loading,
+        errorState,
+        totalPages,
+        currentPage,
+        searchTerm,
+        selectedType,
+        selectedLetter,
+        showAlbumCover,
+        setTempSearchTerm,
+        handlePageChange,
+        handleTypeChange,
+        handleLetterChange,
+        handleSearchSubmit,
+        clearSearch,
+        handleShowAlbumCoverSwitch,
+        onRetry,
+        onCloseError,
+    } = useArtists();
     return (
         <Layout>
             <div className="py-12">

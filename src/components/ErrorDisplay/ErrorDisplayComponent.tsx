@@ -47,39 +47,45 @@ const ErrorDisplayComponent: React.FC<ErrorDisplayProps> = ({
 
     return (
         <div className="my-8 flex justify-center">
-            <Alert variant={getVariant(error)} className="w-auto max-w-md">
-                <AlertTitle>{getTitle(error)}</AlertTitle>
-                <AlertDescription className="flex items-center justify-between">
-                    <div>
-                        {error.message}
-                        {error.statusCode && <span className="ml-2 text-sm opacity-75">(HTTP {error.statusCode})</span>}
-                    </div>
-                    <div className="flex gap-2">
-                        {showRetryButton && onRetry && error.retryable && (
-                            <Button
-                                size="sm"
-                                onClick={onRetry}
-                                disabled={isRetrying}
-                                variant="outline"
-                                className="flex w-20 items-center gap-1 text-gray-500"
-                            >
-                                <Image src="/refresh.svg" alt="Refresh" width={16} height={16} />
-                                {isRetrying ? "Retrying..." : "Retry"}
-                            </Button>
-                        )}
-                        {onClose && (
-                            <Button
-                                size="sm"
-                                onClick={onClose}
-                                variant="outline"
-                                className="flex w-20 items-center gap-1 text-gray-500"
-                            >
-                                <Image src="/close.svg" alt="Close" width={16} height={16} />
-                                Close
-                            </Button>
-                        )}
-                    </div>
+            <Alert variant={getVariant(error)} className="relative w-auto min-w-96 max-w-lg">
+                <AlertTitle className="text-lg font-bold mb-4 pr-10">{getTitle(error)}</AlertTitle>
+                <AlertDescription>
+                    {error.message}
+                    {error.statusCode && <span className="ml-2 text-sm opacity-75">(HTTP {error.statusCode})</span>}
                 </AlertDescription>
+
+                {/* Ikon gombok a jobb felső sarokban */}
+                <div className="absolute right-3 top-3 flex gap-1">
+                    {showRetryButton && onRetry && error.retryable && (
+                        <Button
+                            size="sm"
+                            onClick={onRetry}
+                            disabled={isRetrying}
+                            variant="ghost"
+                            className="h-8 w-8 p-0 hover:bg-gray-100"
+                            title={isRetrying ? "Retrying..." : "Retry"}
+                        >
+                            <Image
+                                src="/refresh.svg"
+                                alt={isRetrying ? "Retrying..." : "Retry"}
+                                width={16}
+                                height={16}
+                                className={isRetrying ? "animate-spin" : ""}
+                            />
+                        </Button>
+                    )}
+                    {onClose && (
+                        <Button
+                            size="sm"
+                            onClick={onClose}
+                            variant="ghost"
+                            className="h-8 w-8 p-0 hover:bg-gray-100"
+                            title="Close"
+                        >
+                            <Image src="/close.svg" alt="Close" width={16} height={16} />
+                        </Button>
+                    )}
+                </div>
             </Alert>
         </div>
     );

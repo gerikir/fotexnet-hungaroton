@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { ArtistService, ArtistFilters } from "@/services/artistService";
@@ -28,6 +28,12 @@ export const useArtistsOptimized = () => {
     const router = useRouter();
     const perPage = 50;
     const { errorState, handleError, clearError } = useErrorHandler();
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const [showTooltip, setShowTooltip] = useState(false);
+
+    const handleTooltipChange = useCallback((show: boolean) => {
+        setShowTooltip(show);
+    }, []);
 
     const [searchParams, setSearchParams] = useState<TSearchParams>({
         page: 1,
@@ -39,7 +45,7 @@ export const useArtistsOptimized = () => {
 
     const [tempSearchTerm, setTempSearchTerm] = useState<string>("");
 
-    const debouncedSearch = useDebounce(tempSearchTerm, 300);
+    const debouncedSearch = useDebounce(tempSearchTerm, 800);
 
     const currentFilters: ArtistFilters = useMemo(
         () => ({
@@ -68,6 +74,8 @@ export const useArtistsOptimized = () => {
         },
     );
 
+    const loading = isLoading;
+
     useEffect(() => {
         if (!router.isReady) return;
 
@@ -87,9 +95,23 @@ export const useArtistsOptimized = () => {
 
     useEffect(() => {
         if (debouncedSearch !== searchParams.search) {
-            setSearchParams((prev) => ({ ...prev, search: debouncedSearch, page: 1 }));
+            setSearchParams((prev) => ({
+                ...prev,
+                search: debouncedSearch,
+                letter: debouncedSearch ? "" : prev.letter,
+                page: 1,
+            }));
         }
     }, [debouncedSearch, searchParams.search]);
+
+    useEffect(() => {
+        if (!loading && searchInputRef.current && tempSearchTerm) {
+            searchInputRef.current.focus();
+
+            const length = tempSearchTerm.length;
+            searchInputRef.current.setSelectionRange(length, length);
+        }
+    }, [loading, tempSearchTerm]);
 
     const updateUrl = useCallback(
         (newParams: Partial<TSearchParams>) => {
@@ -145,7 +167,8 @@ export const useArtistsOptimized = () => {
 
     const handleLetterChange = useCallback(
         (value: string) => {
-            updateUrl({ page: 1, letter: value });
+            setTempSearchTerm("");
+            updateUrl({ page: 1, letter: value, search: "" });
         },
         [updateUrl],
     );
@@ -163,7 +186,7 @@ export const useArtistsOptimized = () => {
 
     const artists = data?.data || [];
     const totalPages = data?.pagination?.total_pages || 1;
-    const loading = isLoading;
+    const totalItems = data?.pagination?.total_items || 0;
     const hasError = !!error;
 
     return {
@@ -171,6 +194,7 @@ export const useArtistsOptimized = () => {
         artists,
         loading,
         totalPages,
+        totalItems,
         currentPage: searchParams.page,
         searchTerm: tempSearchTerm,
         selectedType: searchParams.type,
@@ -188,5 +212,8 @@ export const useArtistsOptimized = () => {
         handleShowAlbumCoverSwitch,
         onRetry: handleRetry,
         onCloseError: clearError,
+        searchInputRef,
+        showTooltip,
+        handleTooltipChange,
     };
 };

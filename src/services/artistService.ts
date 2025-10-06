@@ -13,10 +13,7 @@ export class ArtistService {
     private static baseUrl: string;
 
     static {
-        this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
-        if (!this.baseUrl) {
-            throw new Error("NEXT_PUBLIC_API_BASE_URL environment variable is not set");
-        }
+        this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://exam.api.fotex.net";
     }
 
     static async getArtists(filters: ArtistFilters): Promise<TArtistResponse> {

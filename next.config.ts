@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: process.env.NEXT_PUBLIC_API_BASE_URL?.replace("https://", "") || "localhost",
+                hostname: "exam.api.fotex.net",
             },
             {
                 protocol: "https",

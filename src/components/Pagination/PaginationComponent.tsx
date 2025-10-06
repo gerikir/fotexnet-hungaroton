@@ -1,12 +1,4 @@
 import React from "react";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 
 interface PaginationComponentProps {
     totalPages: number;
@@ -21,54 +13,45 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ totalPages, c
 
     return (
         <div className="mt-20 flex justify-center">
-            <Pagination>
-                <PaginationContent>
-                    {currentPage > 1 && (
-                        <PaginationItem>
-                            <PaginationPrevious
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    onPageChange(currentPage - 1);
-                                }}
-                            />
-                        </PaginationItem>
-                    )}
+            <div className="flex items-center gap-2">
+                {currentPage > 1 && (
+                    <button
+                        onClick={() => onPageChange(currentPage - 1)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
+                    >
+                        ←
+                    </button>
+                )}
 
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        const startPage = Math.max(1, currentPage - 2);
-                        const page = startPage + i;
-                        if (page > totalPages) return null;
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const startPage = Math.max(1, currentPage - 2);
+                    const page = startPage + i;
+                    if (page > totalPages) return null;
 
-                        return (
-                            <PaginationItem key={page}>
-                                <PaginationLink
-                                    href="#"
-                                    isActive={currentPage === page}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        onPageChange(page);
-                                    }}
-                                >
-                                    {page}
-                                </PaginationLink>
-                            </PaginationItem>
-                        );
-                    })}
+                    return (
+                        <button
+                            key={page}
+                            onClick={() => onPageChange(page)}
+                            className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium ${
+                                currentPage === page
+                                    ? "border-primary-green bg-primary-green text-white"
+                                    : "border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    );
+                })}
 
-                    {currentPage < totalPages && (
-                        <PaginationItem>
-                            <PaginationNext
-                                href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    onPageChange(currentPage + 1);
-                                }}
-                            />
-                        </PaginationItem>
-                    )}
-                </PaginationContent>
-            </Pagination>
+                {currentPage < totalPages && (
+                    <button
+                        onClick={() => onPageChange(currentPage + 1)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
+                    >
+                        →
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

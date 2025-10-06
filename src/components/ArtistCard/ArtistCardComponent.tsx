@@ -18,7 +18,7 @@ const ArtistCardComponent: React.FC<{ artist: TArtist }> = ({ artist }) => (
             />
         </div>
 
-        <div className="relative flex min-h-[108px] flex-col justify-between bg-gray-800 p-4 text-left">
+        <div className="relative flex min-h-[120px] flex-col justify-between bg-gray-800 p-4 text-left">
             <div className="absolute inset-x-0 bottom-[100%] h-28 bg-gradient-to-b from-transparent to-gray-800" />
             <h3 className="m-0 pr-12 text-lg font-bold leading-tight text-white" title={artist.name}>
                 {artist.name}

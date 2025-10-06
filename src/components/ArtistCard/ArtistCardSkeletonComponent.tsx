@@ -6,7 +6,7 @@ const ArtistCardSkeletonComponent = () => (
         <div className="relative w-full flex-1">
             <Skeleton className="absolute inset-0 h-full w-full" />
         </div>
-        <div className="relative flex min-h-[108px] flex-col justify-between bg-gray-800 px-4 pb-4 pt-2 text-left">
+        <div className="relative flex min-h-[120px] flex-col justify-between bg-gray-800 px-4 pb-4 pt-2 text-left">
             <div className="absolute inset-x-0 bottom-[100%] h-28 bg-gradient-to-b from-transparent to-gray-800" />
             <Skeleton className="h-6 w-4/5 rounded bg-white/10" />
             <div className="absolute bottom-4 right-4 flex items-center gap-2">

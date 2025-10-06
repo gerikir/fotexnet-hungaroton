@@ -45,8 +45,8 @@ const FiltersComponent: React.FC<FiltersProps> = ({
     const isClearDisabled = loading || (!searchTerm && !selectedType && !selectedLetter);
 
     return (
-        <div className="mb-14 mt-8">
-            <div className="grid grid-cols-12 gap-4">
+        <div className="mb-8 mt-8 md:mb-20">
+            <div className="grid grid-cols-12 gap-6 xl:gap-8">
                 <div className="col-span-full md:col-span-3 lg:col-span-3">
                     <form onSubmit={onSearchSubmit}>
                         <div className="relative">
@@ -55,11 +55,13 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                                 placeholder="Search by name"
                                 value={searchTerm}
                                 onChange={(e) => onSearchChange(e.target.value)}
-                                className="h-10 bg-white"
+                                className="h-10 border-gray-500 bg-white"
                                 disabled={loading}
                             />
                             <button type="submit" className="absolute right-3 top-2.5">
-                                <Image src="/search.svg" alt="Search" width={20} height={20} />
+                                <div className="relative h-5 w-5">
+                                    <Image src="/search.svg" alt="Search" fill className="object-contain" />
+                                </div>
                             </button>
                         </div>
                     </form>
@@ -71,7 +73,7 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                         onValueChange={(value) => onTypeChange(value === "all" ? "" : value)}
                         disabled={loading}
                     >
-                        <SelectTrigger className="bg-white">
+                        <SelectTrigger className="border-gray-500 bg-white">
                             <SelectValue placeholder="All types" />
                         </SelectTrigger>
                         <SelectContent>
@@ -83,9 +85,29 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                     </Select>
                 </div>
 
-                <div className="col-span-full md:col-span-3 lg:col-span-6">
-                    <div className="flex items-center justify-between gap-2">
-                        <div className="flex h-full items-center gap-2">
+                <div className="col-span-full md:hidden">
+                    <Select
+                        value={selectedLetter || "all"}
+                        onValueChange={(value) => onLetterChange(value === "all" ? "" : value)}
+                        disabled={loading}
+                    >
+                        <SelectTrigger className="border-gray-500 bg-white">
+                            <SelectValue placeholder="All letters" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All letters</SelectItem>
+                            {ABC.map((letter) => (
+                                <SelectItem key={letter} value={letter}>
+                                    {letter}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="col-span-full md:col-span-6">
+                    <div className="flex h-full items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
                             <Switch
                                 id="album-cover"
                                 className="self-center"
@@ -99,7 +121,7 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                         </div>
                         <div className="flex items-center gap-3">
                             {!loading && (
-                                <span className="text-sm text-gray-600">
+                                <span className="text-sm text-gray-900">
                                     {albumCount} album{albumCount !== 1 ? "s" : ""}
                                 </span>
                             )}
@@ -109,18 +131,11 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                                         onClick={onClearSearch}
                                         variant="outline"
                                         size="sm"
-                                        className="h-8 w-8 p-0"
+                                        className="h-8 w-8 border-gray-500 p-0"
                                         onMouseEnter={() => onTooltipChange(true)}
                                         onMouseLeave={() => onTooltipChange(false)}
                                     >
-                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M6 18L18 6M6 6l12 12"
-                                            />
-                                        </svg>
+                                        <Image src="/close.svg" alt="Clear" width={16} height={16} />
                                     </Button>
                                     {showTooltip && (
                                         <div className="absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-xs text-white">
@@ -135,7 +150,42 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                 </div>
 
                 <div className="col-span-full">
-                    <div className="mt-4 flex justify-between gap-1">
+                    <div className="mt-4 hidden md:block xl:hidden">
+                        <div className="flex flex-wrap justify-between gap-1">
+                            {ABC.slice(0, 13).map((letter) => (
+                                <button
+                                    key={letter}
+                                    onClick={() => onLetterChange(selectedLetter === letter ? "" : letter)}
+                                    disabled={loading}
+                                    className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium ${
+                                        selectedLetter === letter
+                                            ? "border-primary-green bg-primary-green text-white"
+                                            : "border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
+                                    } ${loading ? "cursor-not-allowed opacity-50" : ""}`}
+                                >
+                                    {letter}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="mt-4 flex flex-wrap justify-between gap-1">
+                            {ABC.slice(13).map((letter) => (
+                                <button
+                                    key={letter}
+                                    onClick={() => onLetterChange(selectedLetter === letter ? "" : letter)}
+                                    disabled={loading}
+                                    className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium ${
+                                        selectedLetter === letter
+                                            ? "border-primary-green bg-primary-green text-white"
+                                            : "border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
+                                    } ${loading ? "cursor-not-allowed opacity-50" : ""}`}
+                                >
+                                    {letter}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="hidden justify-between gap-1 xl:flex">
                         {ABC.map((letter) => (
                             <button
                                 key={letter}
@@ -143,8 +193,8 @@ const FiltersComponent: React.FC<FiltersProps> = ({
                                 disabled={loading}
                                 className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-medium ${
                                     selectedLetter === letter
-                                        ? "border-[#459557] bg-[#459557] text-white"
-                                        : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                                        ? "border-primary-green bg-primary-green text-white"
+                                        : "border-gray-500 bg-white text-gray-700 hover:bg-gray-50"
                                 } ${loading ? "cursor-not-allowed opacity-50" : ""}`}
                             >
                                 {letter}

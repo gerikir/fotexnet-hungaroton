@@ -5,6 +5,7 @@ import { ArtistService, ArtistFilters } from "@/services/artistService";
 import { TSearchParams } from "@/types/artist";
 import { useErrorHandler } from "./useErrorHandler";
 import { useDebounce } from "./useDebounce";
+import { useBreakpoint } from "./useBreakpoint";
 
 const fetcher = async (url: string, filters: ArtistFilters) => {
     const data = await ArtistService.getArtists(filters);
@@ -26,7 +27,7 @@ const getCacheKey = (filters: ArtistFilters) => {
 
 export const useArtistsOptimized = () => {
     const router = useRouter();
-    const perPage = 50;
+    const { cardsPerPage } = useBreakpoint();
     const { errorState, handleError, clearError } = useErrorHandler();
     const searchInputRef = useRef<HTMLInputElement>(null);
     const [showTooltip, setShowTooltip] = useState(false);
@@ -50,13 +51,13 @@ export const useArtistsOptimized = () => {
     const currentFilters: ArtistFilters = useMemo(
         () => ({
             page: searchParams.page,
-            per_page: perPage,
+            per_page: cardsPerPage,
             search: searchParams.search || undefined,
             type: searchParams.type || undefined,
             letter: searchParams.letter || undefined,
             include_image: searchParams.showAlbumCover,
         }),
-        [searchParams, perPage],
+        [searchParams, cardsPerPage],
     );
 
     const { data, error, isLoading, mutate } = useSWR(
@@ -188,6 +189,15 @@ export const useArtistsOptimized = () => {
     const totalPages = data?.pagination?.total_pages || 1;
     const totalItems = data?.pagination?.total_items || 0;
     const hasError = !!error;
+
+    useEffect(() => {
+        if (totalItems > 0) {
+            const newTotalPages = Math.ceil(totalItems / cardsPerPage);
+            if (searchParams.page > newTotalPages && newTotalPages > 0) {
+                updateUrl({ page: 1 });
+            }
+        }
+    }, [cardsPerPage, totalItems, searchParams.page, updateUrl]);
 
     return {
         // State

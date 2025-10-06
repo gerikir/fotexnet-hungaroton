@@ -35,7 +35,7 @@ const ArtistListScreenComponent = () => {
 
     return (
         <Layout>
-            <main className="relative pb-12 pt-32">
+            <main className="relative pb-12 pt-24 lg:pt-32">
                 <h2 className="mb-8 text-3xl font-bold text-gray-900">Artists</h2>
 
                 <Filters

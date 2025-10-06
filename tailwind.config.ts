@@ -9,6 +9,9 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ["var(--font-sunflower)", "system-ui", "sans-serif"],
+            },
             colors: {
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
@@ -50,6 +53,7 @@ export default {
                     "4": "hsl(var(--chart-4))",
                     "5": "hsl(var(--chart-5))",
                 },
+                "primary-green": "var(--color-primary-green)",
             },
             borderRadius: {
                 lg: "var(--radius)",

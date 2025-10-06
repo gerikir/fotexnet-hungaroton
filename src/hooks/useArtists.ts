@@ -18,7 +18,7 @@ export const useArtists = () => {
         search: "",
         type: "",
         letter: "",
-        showAlbumCover: false,
+        showAlbumCover: true,
     });
 
     const [tempSearchTerm, setTempSearchTerm] = useState<string>("");
@@ -66,7 +66,7 @@ export const useArtists = () => {
             search: search && typeof search === "string" ? search : "",
             type: type && typeof type === "string" ? type : "",
             letter: letter && typeof letter === "string" ? letter : "",
-            showAlbumCover: include_image === "true",
+            showAlbumCover: include_image !== "false",
         };
 
         setSearchParams(newParams);
@@ -88,7 +88,7 @@ export const useArtists = () => {
         if (updatedParams.search) query.search = updatedParams.search;
         if (updatedParams.type) query.type = updatedParams.type;
         if (updatedParams.letter) query.letter = updatedParams.letter;
-        if (updatedParams.showAlbumCover) query.include_image = "true";
+        if (!updatedParams.showAlbumCover) query.include_image = "false";
 
         router.push(
             {

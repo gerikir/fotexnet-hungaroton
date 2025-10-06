@@ -41,7 +41,7 @@ export const useArtistsOptimized = () => {
         search: "",
         type: "",
         letter: "",
-        showAlbumCover: false,
+        showAlbumCover: true,
     });
 
     const [tempSearchTerm, setTempSearchTerm] = useState<string>("");
@@ -68,7 +68,7 @@ export const useArtistsOptimized = () => {
             revalidateOnReconnect: true,
             dedupingInterval: 2000,
             errorRetryCount: 3,
-            errorRetryInterval: 1000,
+            errorRetryInterval: 5000,
             onError: (err) => {
                 handleError(err);
             },
@@ -87,7 +87,7 @@ export const useArtistsOptimized = () => {
             search: search && typeof search === "string" ? search : "",
             type: type && typeof type === "string" ? type : "",
             letter: letter && typeof letter === "string" ? letter : "",
-            showAlbumCover: include_image === "true",
+            showAlbumCover: include_image === "false" ? false : true,
         };
 
         setSearchParams(newParams);
@@ -125,7 +125,7 @@ export const useArtistsOptimized = () => {
             if (updatedParams.search) query.search = updatedParams.search;
             if (updatedParams.type) query.type = updatedParams.type;
             if (updatedParams.letter) query.letter = updatedParams.letter;
-            if (updatedParams.showAlbumCover) query.include_image = "true";
+            if (!updatedParams.showAlbumCover) query.include_image = "false";
 
             router.push(
                 {
